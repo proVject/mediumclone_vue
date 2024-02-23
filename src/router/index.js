@@ -1,17 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView'
+import GlobalFeed from '../views/GlobalFeed'
 import Register from '@/views/Register'
 import Login from '@/views/Login'
+import TagFeed from '@/views/TagFeed'
+import YourFeed from '@/views/YourFeed'
+import Article from '@/views/Article'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-  },
   {
     path: '/register',
     name: 'register',
@@ -21,6 +19,51 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/',
+    name: 'globalFeed',
+    component: GlobalFeed,
+  },
+  {
+    path: '/feed',
+    name: 'yourFeed',
+    component: YourFeed,
+  },
+  {
+    path: '/tags/:slug',
+    name: 'tagFeed',
+    component: TagFeed,
+  },
+  {
+    path: '/articles/new',
+    name: 'createArticle',
+    component: GlobalFeed,
+  },
+  {
+    path: '/articles/:slug',
+    name: 'article',
+    component: Article,
+  },
+  {
+    path: '/articles/:slug/edit',
+    name: 'editArticle',
+    component: GlobalFeed,
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: GlobalFeed,
+  },
+  {
+    path: '/profiles/:slug',
+    name: 'userProfile',
+    component: GlobalFeed,
+  },
+  {
+    path: '/profiles/:slug/favorites',
+    name: 'userProfileFavorites',
+    component: GlobalFeed,
   },
 ]
 

@@ -1,0 +1,94 @@
+<template>
+  <div class="article-page">
+    <div class="banner" v-if="article">
+      <div class="container">
+        <h1>{{ article.title }}</h1>
+        <div class="article-meta">
+          <router-link
+            :to="{name: 'userProfile', params: {slug: article.author.username}}"
+          >
+            <img :src="article.author.image" alt="avatar" />
+          </router-link>
+          <div class="info">
+            <router-link
+              class="author"
+              :to="{
+                name: 'userProfile',
+                params: {slug: article.author.username},
+              }"
+            >
+              {{ article.author.username }}
+            </router-link>
+            <span class="date">{{ article.createdAt }}</span>
+          </div>
+          <span v-if="isAuthor">
+            <router-link
+              class="btn btn-outline-secondary btn-sm"
+              :to="{name: 'editArticle', params: {slug: article.slug}}"
+            >
+              <i class="ion-edit" />
+              Edit Article
+            </router-link>
+            <button
+              class="btn btn-outline-danger btn-sm"
+              @click="onDeleteArticle"
+            >
+              <i class="ion-trash-a" />
+              Delete Article
+            </button>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="container page">
+      <mcv-loading v-if="isLoading" />
+      <mcv-error-message v-if="error" :message="error" />
+      <div v-if="article" class="row article-content">
+        <div class="col-xs-12">
+          <div>
+            <p>{{ article.body }}</p>
+          </div>
+          <mcv-tag-list :tag-list="article.tagList" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import {mapGetters} from 'vuex'
+import {actionTypes, getterTypes} from '@/store/modules/article'
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
+import McvLoading from '@/components/Loading.vue'
+import McvErrorMessage from '@/components/ErrorMessage.vue'
+import McvTagList from '@/components/TagList.vue'
+
+export default {
+  name: 'McvArticle',
+  components: {McvTagList, McvErrorMessage, McvLoading},
+  computed: {
+    ...mapGetters({
+      article: getterTypes.data,
+      error: getterTypes.error,
+      isLoading: getterTypes.isLoading,
+      currentUser: authGetterTypes.currentUser,
+    }),
+    isAuthor() {
+      if (!this.article || !this.currentUser) return false
+      return this.article.author.username === this.currentUser.username
+    },
+  },
+  mounted() {
+    const slug = this.$route.params.slug
+    this.$store.dispatch(actionTypes.getArticle, {slug})
+  },
+  methods: {
+    onDeleteArticle() {
+      const slug = this.$route.params.slug
+      this.$store.dispatch(actionTypes.deleteArticle, {slug}).then(() => {
+        this.$router.push({name: 'globalFeed'})
+      })
+    },
+  },
+}
+</script>
