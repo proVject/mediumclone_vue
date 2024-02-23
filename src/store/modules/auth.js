@@ -32,11 +32,19 @@ export const mutationTypes = {
   getCurrentUserStart: '[auth] getCurrentUserStart',
   getCurrentUserSuccess: '[auth] getCurrentUserSuccess',
   getCurrentUserFailure: '[auth] getCurrentUserFailure',
+  // updateCurrentUser
+  updateCurrentUserStart: '[auth] updateCurrentUserStart',
+  updateCurrentUserSuccess: '[auth] updateCurrentUserSuccess',
+  updateCurrentUserFailure: '[auth] updateCurrentUserFailure',
+  // logout
+  logout: '[auth] logout',
 }
 export const actionTypes = {
   register: '[auth] register',
   login: '[auth] login',
   getCurrentUser: '[auth] getCurrentUser',
+  updateCurrentUser: '[auth] updateCurrentUser',
+  logout: '[auth] logout',
 }
 
 const getters = {
@@ -94,6 +102,16 @@ const mutations = {
     state.isLoading = false
     state.isLoggedIn = false
   },
+  // getCurrentUser
+  [mutationTypes.updateCurrentUserStart]() {},
+  [mutationTypes.updateCurrentUserSuccess](state, payload) {
+    state.currentUser = payload
+  },
+  [mutationTypes.updateCurrentUserFailure]() {},
+  [mutationTypes.logout](state) {
+    state.isLoggedIn = false
+    state.currentUser = null
+  },
 }
 
 const actions = {
@@ -144,6 +162,28 @@ const actions = {
         .catch(() => {
           context.commit(mutationTypes.getCurrentUserFailure)
         })
+    })
+  },
+  [actionTypes.updateCurrentUser](context, {currentUserInput}) {
+    return new Promise((resolve) => {
+      context.commit(mutationTypes.updateCurrentUserStart)
+      authApi
+        .updateCurrentUser(currentUserInput)
+        .then((user) => {
+          context.commit(mutationTypes.updateCurrentUserSuccess, user)
+          resolve(user)
+        })
+        .catch((result) => {
+          const errors = result.response.data.errors
+          context.commit(mutationTypes.updateCurrentUserFailure, errors)
+        })
+    })
+  },
+  [actionTypes.logout](context) {
+    return new Promise((resolve) => {
+      persistenceStorage.setItem('accessToken', '')
+      context.commit(mutationTypes.logout)
+      resolve()
     })
   },
 }
