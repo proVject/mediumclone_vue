@@ -152,6 +152,12 @@ const actions = {
   [actionTypes.getCurrentUser](context) {
     return new Promise((resolve) => {
       context.commit(mutationTypes.getCurrentUserStart)
+      const accessToken = persistenceStorage.getItem('accessToken')
+      if (!accessToken) {
+        context.commit(mutationTypes.getCurrentUserFailure)
+        return
+      }
+
       authApi
         .getCurrentUser()
         .then((response) => {
