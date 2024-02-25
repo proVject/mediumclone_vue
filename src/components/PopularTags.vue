@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import {actionTypes, getterTypes} from '@/store/modules/PopularTags'
+import {actionTypes, getterTypes} from '@/store/modules/popularTags'
 import {mapGetters} from 'vuex'
 import McvErrorMessage from '@/components/ErrorMessage.vue'
 import McvLoading from '@/components/Loading.vue'

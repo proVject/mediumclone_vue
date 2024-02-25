@@ -37,6 +37,20 @@
               Delete Article
             </button>
           </span>
+          <span v-else-if="!isAuthor">
+            <mcv-follow-profile
+              :is-logged-in="isLoggedIn"
+              :profile-slug="article.author.username"
+              :is-following="article.author.following"
+            />
+            <mcv-add-to-favorites
+              :article-slug="article.slug"
+              :is-favorite="article.favorited"
+              :favorites-count="article.favoritesCount"
+              :is-logged-in="isLoggedIn"
+              prefix="Favorite Article"
+            />
+          </span>
         </div>
       </div>
     </div>
@@ -62,16 +76,25 @@ import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import McvLoading from '@/components/Loading.vue'
 import McvErrorMessage from '@/components/ErrorMessage.vue'
 import McvTagList from '@/components/TagList.vue'
+import McvAddToFavorites from '@/components/AddToFavorites.vue'
+import McvFollowProfile from '@/components/FollowProfile.vue'
 
 export default {
   name: 'McvArticle',
-  components: {McvTagList, McvErrorMessage, McvLoading},
+  components: {
+    McvFollowProfile,
+    McvAddToFavorites,
+    McvTagList,
+    McvErrorMessage,
+    McvLoading,
+  },
   computed: {
     ...mapGetters({
       article: getterTypes.data,
       error: getterTypes.error,
       isLoading: getterTypes.isLoading,
       currentUser: authGetterTypes.currentUser,
+      isLoggedIn: authGetterTypes.isLoggedIn,
     }),
     isAuthor() {
       if (!this.article || !this.currentUser) return false

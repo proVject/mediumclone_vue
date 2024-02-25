@@ -27,7 +27,14 @@
             </router-link>
             <div class="date">{{ article.createdAt }}</div>
           </div>
-          <div class="pull-xs-right">ADD TO FAVORITES</div>
+          <div class="pull-xs-right">
+            <mcv-add-to-favorites
+              :article-slug="article.slug"
+              :favorites-count="article.favoritesCount"
+              :is-favorite="article.favorited"
+              :is-logged-in="isLoggedIn"
+            />
+          </div>
         </div>
         <router-link
           :to="{name: 'article', params: {slug: article.slug}}"
@@ -50,7 +57,8 @@
 </template>
 
 <script>
-import {actionTypes, getterTypes} from '@/store/modules/feed'
+import {actionTypes, getterTypes as feedGetterTypes} from '@/store/modules/feed'
+import {getterTypes as authGetterTypes} from '@/store/modules/auth'
 import {mapGetters} from 'vuex'
 import McvPagination from '@/components/Pagination.vue'
 import {limit} from '@/helpers/vars'
@@ -58,10 +66,17 @@ import queryString from 'query-string'
 import McvLoading from '@/components/Loading.vue'
 import McvErrorMessage from '@/components/ErrorMessage.vue'
 import McvTagList from '@/components/TagList.vue'
+import McvAddToFavorites from '@/components/AddToFavorites.vue'
 
 export default {
   name: 'McvFeed',
-  components: {McvTagList, McvErrorMessage, McvLoading, McvPagination},
+  components: {
+    McvAddToFavorites,
+    McvTagList,
+    McvErrorMessage,
+    McvLoading,
+    McvPagination,
+  },
   props: {
     apiUrl: {
       type: String,
@@ -75,9 +90,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      isLoading: getterTypes.isLoading,
-      feed: getterTypes.data,
-      error: getterTypes.error,
+      isLoading: feedGetterTypes.isLoading,
+      feed: feedGetterTypes.data,
+      error: feedGetterTypes.error,
+      isLoggedIn: authGetterTypes.isLoggedIn,
     }),
     currentPage() {
       return Number(this.$route.query.page || '1')
