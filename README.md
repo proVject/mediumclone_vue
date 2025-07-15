@@ -2,7 +2,7 @@
 
 > A full-featured Medium.com clone built with **Vue 2**, **Vuex**, **Vue Router**, and **Axios** – part of the [RealWorld](https://github.com/gothinkster/realworld) project specification.
 
-> sometimes the backend side is down if you test it 
+> sometimes the backend side is down if you test it. 
 
 This project demonstrates how to build a **real-world fullstack application** using Vue 2 as the frontend framework. It includes authentication, article CRUD, tag filtering, user profiles, and more.
 
@@ -13,12 +13,13 @@ This project demonstrates how to build a **real-world fullstack application** us
 ## 🚀 Live Demo
 
 You can try a live version using the RealWorld API backend:  
-🔗 https://demo.realworld.io/#/
-
-Or 
-
 The code with GH pages
 🔗 https://provject.github.io/mediumclone_vue/
+
+or
+
+RealWorld demo
+🔗 https://demo.realworld.io/#/
 
 ---
 

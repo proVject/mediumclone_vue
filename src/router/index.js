@@ -69,9 +69,16 @@ const routes = [
     name: 'userProfileFavorites',
     component: UserProfile,
   },
+  {
+    path: '*',
+    name: '404',
+    component: UserProfile,
+  },
 ]
 
 const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
   routes,
 })
 

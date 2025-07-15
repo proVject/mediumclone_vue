@@ -1,7 +1,7 @@
 import axios from 'axios'
 import persistenceStorage from '@/helpers/persistenceStorage'
 
-axios.defaults.baseURL = 'https://api.realworld.build/api'
+axios.defaults.baseURL = 'https://realworld-api.vovazb.art/'
 
 axios.interceptors.request.use((config) => {
   const token = persistenceStorage.getItem('accessToken')
